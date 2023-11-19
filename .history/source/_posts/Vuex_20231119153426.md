@@ -1,0 +1,292 @@
+---
+title: Vuex
+date: 2023-11-19 15:34:00
+tags:
+---
+
+## VueX :smiley:
+
+### 简介
+- vue开发过程中使用的状态管理工具
+- 管理项目中的数据->不必通过频繁组件传参来同步某个参数的值
+- 特性
+	- 全局状态管理
+	- 数据响应式
+	- 数据分发可以同步(mutation)或者异步(action)
+	- 模块化
+
+### 安装
+```bash
+npm i vuex -s
+```
+
+### 使用
+
+#### 初始化store文件夹下的index
+```js
+import Vue from 'vue'
+import VueX from 'vuex'
+
+// 挂载VueX
+Vue.use(Vuex)
+
+// 创建Vuex对象
+const store = new Vuex.store({
+	state:{
+		// 存放的键值对就是要管理的状态
+		name: 'kk'
+	}
+})
+// 将store导出
+export default store;
+```
+
+#### 挂载到Vue实例
+```js
+new Vue({
+  el: '#app',
+  router,
+  store,  //store:store 和router一样，将我们创建的Vuex实例挂载到这个vue实例中
+  render: h => h(App)
+})
+```
+
+#### 组件中使用VueX
+```html
+<p>{{$store.state.name}}</p>
+```
+
+```js
+this.$store.state.name
+```
+
+## 核心内容
+> VueX中包含如下成员
+> - state 存放状态
+> - mutations state 成员操作
+> - getters 加工state成员给外界
+> - actions 异步操作
+> - modules 模块化状态管理
+
+### VueX工作流程
+
+![image-20230823201319331](https://raw.githubusercontent.com/tkqi/myMarkdownPicture/main/img/202310091912494.png)
+
+- 首先Vue使用VueX是需要向后端发送请求或者异步操作，需要dispatch VueX中actions的方法，以保证数据同步，也就是说，action就是为了让mutation中的方法可以在异步操作中起作用
+- 没有异步操作，可以直接提交状态中的mutation中自己编写的方法来操作state成员**不能直接操作state成员**
+
+### mutations
+- 操作state数据的方法的集合，可以对state内的数据进行增删改
+
+#### mutations使用方法
+mutations方法都有默认的形参([state][,payload])
+- state是当前vuex对象中的state
+- payload是该方法在被调用是传递参数使用的
+```js
+// store中初始化mutation
+const store = new VueX.store({
+state:{
+	name:null
+},
+mutations:{
+	EDIT(state, name)
+	{
+		state.name = name;
+	}
+}
+})
+
+// 组件中调用
+//                 方法名   参数
+this.$store.commit('EDIT', 'jack')
+this.$store.commit('EDIT', {age:18, name:'jack'})
+```
+
+#### 增删state中的成员
+在mutations的方法中进行操作
+```js
+// 增加成员
+Vue.set(state,"age", 15);
+
+// 删除成员
+Vue.set(state, "age");
+```
+
+### getters
+- 对state中的成员加工后传递给外界
+- 有两个默认参数
+	- state
+	- getters：当前getters对象，用于将getters下的其他getter方法拿来使用
+```js
+// store中初始化
+getters:{
+	getInfo(state){
+		return "姓名"+state.name;
+	},
+	getFullInfo(state,getters){
+		return getters.getInfo + "年龄"+state.age;
+	}
+}
+
+// 组件中使用
+this.$store.getters.getInfo;
+```
+
+### actions
+- 直接在mutations中进行异步操作会使数据失效
+- actions专门进行异步，最终提交mutations方法
+- 有两个默认参数
+	- context：上下文(相当于this)对象
+	- payload：挂载参数
+```js
+// store中定义初始化
+actions:{
+	aEdit(context, payload){
+		setTimeout(()=>{
+			//             进行异步的方法名  挂载参数
+			context.commit('edit',         payload);
+		}, 2000)
+	}
+}
+
+// 组件中调用
+this.$store.dispatch('aEdit', {age:10})
+
+// 将异步操作封装为promise对象
+actions:{
+aEdit(context, payload){
+	return new Promise((resolve,reject)=>{
+		setTimeout(()=>{
+			//             进行异步的方法名  挂载参数
+			context.commit('edit',         payload);
+		}, 2000)
+	})
+}
+// 封装为promise对象后组件中使用
+this.$store.dispatch('aEdit', {age:10})
+.then(...)
+.catch(...)
+```
+
+### modules
+- 当项目庞大时，可以采取模块化管理模式
+- 将store分割成模块
+- 每个模块有自己的state、mutation、action和getter
+```js
+modules:{
+	a:{
+		state:{},
+		getters:{}
+	}
+}
+
+// 组件内调用模块a的状态
+this.$store.state.a
+// 提交和dispatch某个方法和之前用于，会自动执行所有模块内对应type的方法
+this.$store.commit('edit');
+this.$store.dispatch('aEdit');
+```
+
+#### 模块的细节
+> 模块中mutations和getters中的方法接受的第一个参数是自身局部模块的state
+
+```js
+modules:{
+	a:{
+		state:{key:1},
+		mutations:{
+			edit(state){
+				state.key = 1;
+			}
+		},
+		getters:{}
+	}
+}
+```
+
+#### getters中方法的第三个参数是根节点的state
+```js
+modules:{
+	a:{
+		state:{key:1},
+		getters:{
+			getKey(state, getter, rootState)
+			{
+				return rootState.key+state.key;
+			}
+		}
+	}
+}
+```
+
+#### actions中局部模块状态是context.state，根节点状态是context.rootState
+```js
+modules:{
+	a:{
+		state:{key:1},
+		actions:{
+			aEdit(context){
+				if(context.state.key == context.rootState.key)
+				context.commit('edit');
+			}
+		}
+	}
+}
+```
+
+### VueX的辅助函数
+- mapState
+- mapMutations
+- mapGetters
+
+#### 使用准备
+> 使用前需要从vuex导入
+
+```js
+import{ mapState, mapMutations, mapGetters } from 'vuex'
+```
+
+#### mapState
+- 作用：拿到vuex中state的数据
+- 接收
+	- 单个数据接收
+	- 多个数据接收
+```js
+// 映射this.name为store.state.name
+// 单个数据接收
+computed:mapState({
+	'name'
+})
+
+// 多个数据接收
+computed:{
+	...mapState(['name'])
+}
+
+// 组件中使用，被映射为this.name 
+this.name
+```
+
+#### mapMutations
+- 作用：调用方法修改vuex中的属性，可以实时更新vuex
+- 接收方法：可以接收多个方法
+```js
+methods:{
+	...mapMutations({'方法名1','方法名2'})
+}
+
+// 组件中使用，被映射为this.方法名
+this.func
+```
+
+#### mapGetters
+- 作用：对vuex中数据操作并返回
+- 接收
+```js
+computed:{
+	...mapGetters(['getName']),
+}
+
+// 组件中使用，被映射为this.getName
+this.getName
+```
