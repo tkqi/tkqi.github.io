@@ -1,0 +1,60 @@
+---
+layout: build
+title: repository
+date: 2023-11-29 18:00:00
+tags: git
+categories: 
+- tools
+- git 
+---
+
+### 把本地文件push到空的git仓库
+
+1、创建说明文件
+
+```shell
+touch README.md
+```
+
+2、初始化文件夹为目录
+
+```shell
+git init
+```
+
+3、添加所有文件到暂存区
+
+```shell
+# . 代表所有文件
+git add .
+```
+
+4、提交暂存区文件到本地库
+
+```shell
+git commit -m "提交信息"
+```
+
+
+
+5、本地仓库关联远程库
+
+```shell
+git remote add origin 远程仓库地址
+
+#解除关联
+git remote remove origin
+```
+
+6、本地库和远程库同步(仅当远程库不为空)
+
+```shell
+git pull -rebase origin main
+```
+
+7、将本地库内容推送到远程库
+
+```shell
+git push -u origin main
+```
+
