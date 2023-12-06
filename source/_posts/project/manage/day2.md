@@ -1,0 +1,13 @@
+---
+title: day2
+date: 2023-12-06 16:36:40
+tags:
+- Project
+categories:
+- programming
+- project
+- manage
+---
+
+##  day2 for manageSystem
+
