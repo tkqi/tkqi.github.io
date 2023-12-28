@@ -1099,9 +1099,8 @@ static_prefix:
 
   hint: https://lib.baomitu.com/hint.css/2.7.0/
 
-
-# 傻比二次元
-live2d:
+//傻比二次元
+  live2d:
   enable: true
   scriptFrom: local
   pluginRootPath: live2dw/
@@ -1110,7 +1109,7 @@ live2d:
   tagMode: false
   debug: false
   model:
-    use: live2d-widget-model-nico
+    use: live2d-widget-model-tsumiki
   display:
     position: right
     width: 150
@@ -1119,4 +1118,3 @@ live2d:
     show: true
   react:
     opacity: 0.7 
-

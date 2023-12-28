@@ -528,7 +528,7 @@ index:
 # Post Page
 #---------------------------
 post:
-  banner_img: /img/wallpaper1.png
+  banner_img: /img/wallpaper2.png
   banner_img_height: 70
   banner_mask_alpha: 0.3
 
@@ -891,7 +891,7 @@ discuss:
 # Archive Page
 #---------------------------
 archive:
-  banner_img: /img/wallpaper1.png
+  banner_img: /img/wallpaper2.png
   banner_img_height: 60
   banner_mask_alpha: 0.3
 
@@ -902,7 +902,7 @@ archive:
 #---------------------------
 category:
   enable: true
-  banner_img: /img/wallpaper1.png
+  banner_img: /img/wallpaper2.png
   banner_img_height: 60
   banner_mask_alpha: 0.3
 
@@ -931,7 +931,7 @@ category:
 #---------------------------
 tag:
   enable: true
-  banner_img: /img/wallpaper1.png
+  banner_img: /img/wallpaper2.png
   banner_img_height: 80
   banner_mask_alpha: 0.3
   tagcloud:
@@ -948,7 +948,7 @@ tag:
 #---------------------------
 about:
   enable: true
-  banner_img: /img/wallpaper1.png
+  banner_img: /img/wallpaper2.png
   banner_img_height: 60
   banner_mask_alpha: 0.3
   avatar: /img/avatar.png
@@ -970,7 +970,7 @@ about:
 # Custom Page through `hexo new page`
 #---------------------------
 page:
-  banner_img: /img/wallpaper1.png
+  banner_img: /img/wallpaper2.png
   banner_img_height: 60
   banner_mask_alpha: 0.3
 
@@ -981,7 +981,7 @@ page:
 #---------------------------
 page404:
   enable: true
-  banner_img: /img/wallpaper1.png
+  banner_img: /img/wallpaper2.png
   banner_img_height: 85
   banner_mask_alpha: 0.3
   # 重定向到首页的延迟(毫秒)
@@ -1098,3 +1098,25 @@ static_prefix:
   discuss: https://lib.baomitu.com/discuss/1.2.1/
 
   hint: https://lib.baomitu.com/hint.css/2.7.0/
+
+
+# 傻比二次元
+live2d:
+  enable: true
+  scriptFrom: local
+  pluginRootPath: live2dw/
+  pluginJsPath: lib/
+  pluginModelPath: assets/
+  tagMode: false
+  debug: false
+  model:
+    use: live2d-widget-model-nico
+  display:
+    position: right
+    width: 150
+    height: 300
+  mobile:
+    show: true
+  react:
+    opacity: 0.7 
+
